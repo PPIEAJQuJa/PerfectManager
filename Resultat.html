@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats du Jeu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #ff6600;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+        }
+
+        .form-wrapper h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ff6600;
+        }
+
+        .result-summary {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #ff6600;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .result-summary h3 {
+            margin: 0;
+        }
+
+        .table-wrapper {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .ranking-section {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+        }
+
+        .ranking-section h2 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="Logo.png" alt="Logo du jeu" style="height: 40px;"> <!-- Ajustez la hauteur selon vos besoins -->
+        </div>
+        <div class="nav-links">
+            <a href="Nous contacter.html">Nous contacter</a>
+            <a href="Regles du jeu.html">Règles du jeu</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-wrapper">
+            <h1>Résultats du Jeu</h1>
+
+            <!-- Résultats de l'entreprise -->
+            <div class="result-summary">
+                <h3>Résultats de votre entreprise</h3>
+                <p id="company-result">Chargement...</p>
+                <p>Capital Restant : <span id="remaining-capital">Chargement...</span></p>
+            </div>
+
+            <!-- Tableau des résultats -->
+            <div class="table-wrapper">
+                <table id="result-table">
+                    <thead>
+                        <tr>
+                            <th>Désignation</th>
+                            <th>Valeur d'achat</th>
+                            <th>Valeur nette comptable (40%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Les résultats seront ajoutés ici dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Valeur financière de l'entreprise -->
+            <div class="result-summary">
+                <h3>Valeur financière de l'entreprise</h3>
+                <p id="financial-value">Chargement...</p>
+            </div>
+
+            <!-- Classement des entreprises -->
+            <div class="ranking-section">
+                <h2>Classement des entreprises</h2>
+                <table id="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>Classement</th>
+                            <th>Nom de l'entreprise</th>
+                            <th>Valeur financière</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Le classement sera ajouté ici dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour nettoyer la valeur et la convertir en nombre
+        function cleanAndParseNumber(value) {
+            if (typeof value === 'string') {
+                // Supprimer les espaces insécables et le texte "Booster"
+                return parseFloat(value.replace(/\u202f/g, '').replace(" Booster", ""));
+            }
+            return parseFloat(value);
+        }
+
+        // Récupérer les données sauvegardées depuis localStorage
+        const companyData = JSON.parse(localStorage.getItem('companyData')); // Données de l'entreprise
+        const gameResultData = JSON.parse(localStorage.getItem('gameResultData')); // Données des résultats
+        const savedRankings = JSON.parse(localStorage.getItem('rankings')) || []; // Classement
+
+        // Afficher les données pour débogage
+        console.log("Données récupérées depuis localStorage :", companyData, gameResultData);
+
+        if (companyData) {
+            // Afficher les résultats de l'entreprise
+            document.getElementById('company-result').textContent = `Nom de l'entreprise : ${companyData.name || "Non disponible"}`;
+
+            // Afficher le capital restant
+            const remainingCapital = cleanAndParseNumber(companyData.capital);
+            if (!isNaN(remainingCapital)) {
+                document.getElementById('remaining-capital').textContent = `${remainingCapital.toLocaleString()} Booster`;
+            } else {
+                document.getElementById('remaining-capital').textContent = "Non disponible";
+                console.error("Capital restant invalide :", companyData.capital);
+            }
+        } else {
+            document.getElementById('company-result').textContent = "Aucune donnée d'entreprise trouvée.";
+            console.error("Aucune donnée trouvée dans localStorage pour 'companyData'.");
+        }
+
+        if (gameResultData) {
+            // Calculer la valeur nette comptable des investissements (40% de la valeur d'achat)
+            const investments = gameResultData.investments || [];
+            let totalNetValue = 0;
+
+            const resultTable = document.getElementById('result-table').querySelector('tbody');
+            resultTable.innerHTML = "";
+
+            investments.forEach(investment => {
+                if (investment.type === "Achat") {
+                    const amount = cleanAndParseNumber(investment.amount);
+                    if (!isNaN(amount)) {
+                        const netValue = amount * 0.4; // 40% de la valeur d'achat
+                        totalNetValue += netValue;
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${investment.item || "N/A"}</td>
+                            <td>${amount.toLocaleString()} Booster</td>
+                            <td>${netValue.toLocaleString()} Booster</td>
+                        `;
+                        resultTable.appendChild(row);
+                    } else {
+                        console.error("Valeur d'achat invalide pour l'investissement :", investment);
+                    }
+                }
+            });
+
+            // Calculer la valeur financière de l'entreprise
+            const financialValue = (companyData ? cleanAndParseNumber(companyData.capital) : 0) + totalNetValue;
+            if (!isNaN(financialValue)) {
+                document.getElementById('financial-value').textContent = `${financialValue.toLocaleString()} Booster`;
+
+                // Ajouter l'entreprise au classement
+                const newRanking = {
+                    name: companyData ? companyData.name : "Entreprise Inconnue",
+                    value: financialValue
+                };
+
+                savedRankings.push(newRanking);
+
+                // Trier le classement par valeur financière (du plus élevé au plus bas)
+                savedRankings.sort((a, b) => b.value - a.value);
+
+                // Sauvegarder le classement mis à jour
+                localStorage.setItem('rankings', JSON.stringify(savedRankings));
+
+                // Afficher le classement
+                const rankingTable = document.getElementById('ranking-table').querySelector('tbody');
+                rankingTable.innerHTML = "";
+
+                savedRankings.forEach((ranking, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${ranking.name}</td>
+                        <td>${ranking.value.toLocaleString()} Booster</td>
+                    `;
+                    rankingTable.appendChild(row);
+                });
+            } else {
+                document.getElementById('financial-value').textContent = "Valeur financière non disponible";
+                console.error("Valeur financière invalide :", financialValue);
+            }
+        } else {
+            console.error("Aucune donnée trouvée dans localStorage pour 'gameResultData'.");
+        }
+    </script>
+</body>
+</html>

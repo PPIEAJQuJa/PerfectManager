@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #ff6600;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+        }
+
+        .form-wrapper h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #410093;
+        }
+
+        .form-group .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #e65c00;
+        }
+
+        .secondary {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .secondary a {
+            color: #410093;
+            text-decoration: none;
+        }
+
+        .secondary a:hover {
+            text-decoration: underline;
+        }
+
+        .google-login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .google-login img {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="Logo.png" alt="Logo du jeu" style="height: 40px;"> <!-- Ajustez la hauteur selon vos besoins -->
+        </div>
+        <div class="nav-links">
+            <a href="Nous contacter.html">Nous contacter</a>
+            <a href="Regles du jeu.html">Règles du jeu</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="form-wrapper">
+            <h1>Créer un compte Perfect Manager</h1>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="full-name">Nom complet</label>
+                    <input type="text" id="full-name" name="full-name" placeholder="Entrer votre nom complet">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="exemple@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Entrer votre numéro de téléphone">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" placeholder="Créer un mot de passe">
+                    <div class="error">Doit comporter au moins 8 caractères.</div>
+                </div>
+                <div class="form-group">
+                    <label for="birth-date">Date de naissance</label>
+                    <input type="date" id="birth-date" name="birth-date">
+                </div>
+                <button type="submit" class="button" onclick="validateRegisterForm(event)">Suivant</button>
+            </form>
+            <div class="secondary">
+                <a href="Connexion.html">Vous avez déjà un compte ? Connexion</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateRegisterForm(event) {
+            event.preventDefault(); // Empêcher la soumission par défaut
+
+            let fullName = document.getElementById("full-name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let birthDate = document.getElementById("birth-date").value.trim();
+
+            // Validation des champs
+            if (fullName === "" || email === "" || phone === "" || password === "" || birthDate === "") {
+                alert("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            if (password.length < 8) {
+                alert("Le mot de passe doit contenir au moins 8 caractères !");
+                return;
+            }
+
+            // Enregistrement des informations dans localStorage
+            const userData = {
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                password: password, // Note : En production, il faut hasher le mot de passe !
+                birthDate: birthDate,
+            };
+
+            // Vérifier si l'utilisateur existe déjà
+            const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+            const userExists = existingUsers.some(user => user.email === email);
+
+            if (userExists) {
+                alert("Un compte avec cet email existe déjà !");
+                return;
+            }
+
+            // Ajouter le nouvel utilisateur
+            existingUsers.push(userData);
+            localStorage.setItem("users", JSON.stringify(existingUsers));
+
+            // Redirection après inscription réussie
+            alert("Inscription réussie ! Vous allez être redirigé.");
+            window.location.href = "Index.html"; // Rediriger vers la page de connexion
+        }
+    </script>
+</body>
+</html>
