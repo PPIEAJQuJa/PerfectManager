@@ -173,5 +173,28 @@
             }
         }
     </script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBQckkJxhQJ1VjhexYQtL4fecQgEjhHZDg",
+    authDomain: "perfectmanager-7ad08.firebaseapp.com",
+    projectId: "perfectmanager-7ad08",
+    storageBucket: "perfectmanager-7ad08.firebasestorage.app",
+    messagingSenderId: "48834491825",
+    appId: "1:48834491825:web:292d4bf672a443395c7990",
+    measurementId: "G-QSHTRHFGDG"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
